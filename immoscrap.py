@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 from pandas import DataFrame
 import re
 
-site = "https://www.immobilienscout24.de/Suche/S-T/Wohnung-Miete?enteredFrom=one_step_search"
+site_list = ["https://www.immobilienscout24.de/Suche/S-T/Wohnung-Miete", "https://www.immobilienscout24.de/Suche/S-T/Haus-Miete",
+             "https://www.immobilienscout24.de/Suche/S-T/Wohnung-Kauf", "https://www.immobilienscout24.de/Suche/S-T/Haus-Kauf"]
 domain="https://www.immobilienscout24.de"
 wohnung_data = DataFrame()
 
@@ -35,8 +36,11 @@ def get_links(url):
     
 def get_data(url):
     try:
+        url_raw = url
         url = urlopen(url)
     except HTTPError as e:
+        return None
+    except URLError as e:
         return None
     try:
         site_extract = BeautifulSoup(url.read(), "lxml")
@@ -44,10 +48,12 @@ def get_data(url):
     except AttributeError as e:
         return None
     global wohnung_data
+    price = []
+    size = []
+    location = []
+    ownership = []
+    immo_type = []
     for i in range(1,len(rawdata_extract)):
-        price = []
-        size = []
-        location = []
         try:
             price.append(rawdata_extract[i].find_all("dd")[0].get_text().strip())
         except:
@@ -60,17 +66,27 @@ def get_data(url):
             location.append(rawdata_extract[i].find_all("div", {"class":"result-list-entry__address nine-tenths"})[0].get_text().strip())
         except:
             location.append(None)
-        wohnung_data = wohnung_data.append(DataFrame({"price":price, "size":size,"location":location}), ignore_index=True)
+        if "/Wohnung" in url_raw:
+            immo_type.append("Wohnung")
+        elif "/Haus" in url_raw:
+            immo_type.append("Haus")
+        if "-Miete" in url_raw:
+            ownership.append("Miete")
+        elif "-Kauf" in url_raw:
+            ownership.append("Kauf")
+    wohnung_data = wohnung_data.append(DataFrame({"price":price, "size":size,"location":location, "Immobilie":immo_type, "Typ":ownership}), ignore_index=True)
     
 
 
-def immo_crawl(start):
-    links = get_links(start)
-    for link in links:
+def immo_crawl(site_list):
+    link_list = []
+    for site in site_list:
+        link_list = link_list + get_links(site)
+    for link in link_list:
+        print("Bearbeiten des Links: "+link)
         get_data(domain+link)
-        print("Bearbeiten von "+link)
         
-immo_crawl(site)
+immo_crawl(site_list)
 
 wohnung_data.to_csv("~/wohnung_data_raw.csv", sep=";", index=False)
 
