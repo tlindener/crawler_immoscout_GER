@@ -74,7 +74,7 @@ def get_data(url):
             ownership.append("Miete")
         elif "-Kauf" in url_raw:
             ownership.append("Kauf")
-    wohnung_data = wohnung_data.append(DataFrame({"price":price, "size":size,"location":location, "Immobilie":immo_type, "Typ":ownership}), ignore_index=True)
+    wohnung_data = wohnung_data.append(DataFrame({"price":price, "size":size,"location":location, "real_estate":immo_type, "ownership":ownership}), ignore_index=True)
     
 
 
