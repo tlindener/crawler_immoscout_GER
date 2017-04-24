@@ -13,6 +13,9 @@ Usage
 4. Go to your root directory (Home in unix; Documents in Windows)
 5. Use either wohnung_data_clean.csv or wohnung_data_raw.csv for further analysis
 
+Possible Sources of Error
+The crawler was written while using UTF-8, so make sure that you set encoding to UTF-8 in your IDE.
+
 Output
 
 In your home directory you'll find two similar files: wohnung_data_clean.csv and wohnung_data_raw.csv. Both files contain the same data. However, wohnung_data_clean.csv has already been cleaned and is ready for analysis. If you prefer to work with the data that comes directly from Immobilienscout24.de, then you should use wohnung_data_raw.csv.
