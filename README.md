@@ -18,6 +18,7 @@ The crawler was written while using UTF-8, so make sure that you set encoding to
 
 Output
 
+While crawling, the crawler will print out the website it is currently processing. Note that it does not show the domain, don't worry.
 In your home directory you'll find two similar files: wohnung_data_clean.csv and wohnung_data_raw.csv. Both files contain the same data. However, wohnung_data_clean.csv has already been cleaned and is ready for analysis. If you prefer to work with the data that comes directly from Immobilienscout24.de, then you should use wohnung_data_raw.csv.
 There are six variables inside the clean version. Price indicates the price for a given real estate (either rent or total price). size is the size of a listing in square meters. location_first is the most precise location indication (should be equal to the street in most cases). location_last should be equal to the city. real_estate tells you whether it is a flat ("Wohnung") or a house ("Haus"). "ownership" indicates whether the given real estate is for rent ("Miete") or for sale ("Kauf").
 
