@@ -3,6 +3,7 @@ from urllib.error import HTTPError
 from urllib.error import URLError
 from bs4 import BeautifulSoup
 from pandas import DataFrame
+import time
 import re
 
 site_list = ["https://www.immobilienscout24.de/Suche/S-T/Wohnung-Miete", "https://www.immobilienscout24.de/Suche/S-T/Haus-Miete",
@@ -88,7 +89,7 @@ def immo_crawl(site_list):
         
 immo_crawl(site_list)
 
-wohnung_data.to_csv("~/wohnung_data_raw.csv", sep=";", index=False)
+wohnung_data.to_csv("~/wohnung_data_raw_" + time.strftime("%d/%m/%Y")+".csv", sep=";", index=False)
 
 def clean_pricesize(data):
     data = data.replace("€", "")
@@ -112,4 +113,4 @@ wohnung_data_clean["size"] = wohnung_data_clean["size"].apply(clean_pricesize)
 wohnung_data_clean["location_first"] = wohnung_data_clean["location"].apply(get_firstlayer)
 wohnung_data_clean["location_last"] = wohnung_data_clean["location"].apply(get_lastlayer)
 
-wohnung_data_clean.to_csv("~/wohnung_data_clean.csv", sep=";", index=False)
+wohnung_data_clean.to_csv("~/wohnung_data_clean_" + time.strftime("%d/%m/%Y")+".csv", sep=";", index=False)
